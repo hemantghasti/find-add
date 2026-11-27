@@ -1,8 +1,30 @@
-# `/find-add`: Universal Prompt Booster for AI Agents
+# find-add
 
-Type `/find-add <your task>` in your AI tool. It finds the best **skills, plugins, MCP servers, and GitHub repositories** for that task, first on your computer and then online, adds what's useful to the chat, and then does the task with them. You get better results without hunting for tools yourself.
+Type `/find-add <your task>` in your AI coding tool. Before it starts work, the AI looks for skills, plugins, MCP servers and GitHub repos that fit the task, first among what you already have and then online. It tells you what it found and what it's using, then does the task with them.
+
+Skill finders such as `find-skills` help you find and install agent skills. find-add also looks at MCP servers, plugins and GitHub repos, uses what's already installed straight away, and finishes your task in the same reply.
 
 One [Agent Skills](https://agentskills.io/home) file (`SKILL.md`) is the source. The installer copies it to every AI tool it finds, and generates slash-command files for tools that use their own command format.
+
+## Example
+
+A real run in Claude Code, shortened:
+
+```text
+/find-add Add a GitHub Actions check that lints install.sh with ShellCheck and install.ps1 with PSScriptAnalyzer on every push
+```
+
+> **Added Context & Tools**
+>
+> Using now:
+> - `agent-protocols:ci-cd-and-automation` (installed skill): GitHub Actions workflow layout and quality-gate conventions.
+> - [ShellCheck wiki: GitHub Actions](https://shellcheck.net/wiki/GitHub-Actions): ShellCheck is preinstalled on GitHub's Ubuntu runners, so no install step is needed.
+> - [GitHub Docs: Building and testing PowerShell](https://docs.github.com/en/actions/tutorials/build-and-test-code/powershell): install PSScriptAnalyzer, then run `Invoke-ScriptAnalyzer`.
+>
+> Optional installs (not installed):
+> - GitHub MCP server: configured but not signed in. Signing in with `/mcp` would let the AI open the pull request itself.
+
+It then wrote `.github/workflows/lint.yml`, with a ShellCheck job on Ubuntu and a PSScriptAnalyzer job on Windows.
 
 ## Supported Tools
 
@@ -26,6 +48,12 @@ If you install it as a [Claude Code plugin](#claude-code-plugin) instead, Claude
 
 `~/.agents/skills/` is the shared Agent Skills folder, which Codex, Gemini CLI, VS Code and OpenCode also read. The installer always writes it.
 
+## Status
+
+- **Claude Code:** tested. The script-installed skill runs (the example above), and the plugin installs cleanly from GitHub.
+- **Installers:** tested in PowerShell 5.1 and 7 on Windows, and in bash (Git Bash on Windows). Not yet tested on macOS or Linux.
+- **Other tools:** the installer puts the files where each tool's docs say they go, but find-add hasn't been run inside those tools yet. If you try it in one, please [open an issue](https://github.com/hemantghasti/find-add/issues) saying whether it worked.
+
 ## Install
 
 ### Script install (recommended)
@@ -45,11 +73,10 @@ cd find-add
 ```bash
 git clone https://github.com/hemantghasti/find-add.git
 cd find-add
-chmod +x install.sh
 ./install.sh
 ```
 
-Then restart any open AI tools, or reload their skills: `/skills reload` in Antigravity CLI, `/commands reload` in Gemini CLI.
+Then restart any open AI tools so they pick up the new command.
 
 **Options**
 
@@ -96,54 +123,28 @@ Copy `skills/find-add/SKILL.md` to the path shown for your tool in the table abo
 
 ### Chat apps (Claude.ai, ChatGPT, Gemini)
 
-Web chat apps don't load slash commands from files, so there's nothing to install on your computer:
+Not tested yet. Web chat apps don't load slash commands from files, so these are workarounds:
 
-- **Claude.ai:** zip the `skills/find-add` folder and upload it as a custom skill in Claude's settings. Then type `/find-add <task>` in a chat and the skill matches it.
+- **Claude.ai:** zip the `skills/find-add` folder and upload it as a custom skill in Claude's settings, then ask for find-add in a chat.
 - **ChatGPT or Gemini:** paste the text of `SKILL.md` (everything below the `---` header) into a Custom GPT, a Project, or a Gem's instructions. Then start messages there with `/find-add`.
-
-## Usage
-
-```text
-/find-add Build a Next.js dashboard that connects to a PostgreSQL database and exports PDF reports
-```
-
-```text
-/find-add Audit this Python FastAPI repo for security issues and add automated pytest coverage
-```
-
-```text
-/find-add Set up a Stripe webhook handler and test it locally
-```
 
 ## How It Works
 
 1. **Read the task:** works out the goal, the stack, and where a specialised tool would help.
 2. **Local first:** checks the skills, plugins and MCP servers your AI tool already has, then your skill folders and MCP configs.
-3. **Online for the gaps:** searches [skills.sh](https://skills.sh/), the official MCP Registry, and GitHub for the 2 to 4 best resources.
-4. **Show what was added:** opens with an **Added Context & Tools** block listing what it's using now, plus optional installs with exact commands.
-5. **Do the task:** completes your prompt in the same reply using what it found.
+3. **Online for the gaps:** searches [skills.sh](https://skills.sh/), the official MCP Registry, and GitHub, and keeps 2 to 4 resources at most.
+4. **Show what was added:** lists what it's using now, plus optional installs with exact commands (see the [example](#example)).
+5. **Do the task:** completes your task in the same reply, using what it found.
 
 ## Safety
 
-- It never installs or runs third-party packages, scripts, MCP servers or plugins without asking you first. It suggests install commands for you to run.
-- It treats fetched web pages, READMEs and third-party skills as information, not instructions, so text planted in them can't take over your AI tool.
-- It only cites links and commands it actually found, never made-up ones.
+find-add's instructions tell the AI to:
 
-## Repository Structure
+- ask before installing or running any third-party package, script, MCP server or plugin, and otherwise only suggest install commands for you to run;
+- treat web pages, READMEs and other people's skills as information, not as instructions to follow;
+- only cite links and commands it actually found.
 
-```text
-find-add/
-├── .claude-plugin/
-│   ├── plugin.json       # Claude Code plugin manifest
-│   └── marketplace.json  # lets Claude Code install this repo as a plugin
-├── README.md
-├── LICENSE
-├── install.sh          # macOS / Linux installer
-├── install.ps1         # Windows installer
-└── skills/
-    └── find-add/
-        └── SKILL.md    # the skill (single source of truth)
-```
+These are instructions, not hard limits, and an AI can still get them wrong. Your AI tool's own permission prompts are the real safeguard, so keep them on.
 
 ## License
 

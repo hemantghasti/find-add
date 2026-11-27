@@ -4,7 +4,7 @@ description: Find the best local and online skills, plugins, MCP servers, and Gi
 ---
 # find-add
 
-Turn a plain prompt into a boosted one: find the few skills, plugins, MCP servers, and repositories that would most improve the result, bring their useful parts into this chat, then do the task in the same response.
+Find the few skills, plugins, MCP servers, and repositories that would most help with the user's task, bring their useful parts into this chat, then do the task in the same response.
 
 ## Input
 
@@ -66,6 +66,6 @@ Do not stop at the list. In the same response, complete the user's task using th
 
 ## Gotchas
 
-- **Discovery serves the task.** It is not the deliverable. Keep it quick and always finish the task in the same response.
-- **Less context is better.** Loading many skills or long READMEs makes answers worse. Load 1 to 3 local skills and 2 to 4 online resources at most.
+- **Keep discovery short.** A few targeted checks, not a survey. The task is the deliverable.
+- **Less context is better.** Loading many skills or long READMEs makes answers worse, which is why the limits above are small.
 - **Degrade gracefully.** No web access: use local resources only. No file access: use what your client shows plus online search. Neither: say so in one line and do the task with what you have.
