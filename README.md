@@ -9,8 +9,6 @@
 
 ![find-add finding Stripe's docs and MCP server, then adding Stripe Checkout to a Next.js app](assets/demo.gif)
 
-<sub>A real <code>/find-add</code> run in Claude Code, replayed as an animation.</sub>
-
 One command. Claude Code, Copilot, Cursor, Codex, Cline, Windsurf and more. No more digging through awesome-lists before every task.
 
 ## The problem
