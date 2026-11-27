@@ -7,6 +7,10 @@
 [![License: MIT](https://img.shields.io/github/license/hemantghasti/find-add)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/hemantghasti/find-add?style=social)](https://github.com/hemantghasti/find-add/stargazers)
 
+![find-add finding Stripe's docs and MCP server, then adding Stripe Checkout to a Next.js app](assets/demo.gif)
+
+<sub>A real <code>/find-add</code> run in Claude Code, replayed as an animation.</sub>
+
 One command. Claude Code, Copilot, Cursor, Codex, Cline, Windsurf and more. No more digging through awesome-lists before every task.
 
 ## The problem
