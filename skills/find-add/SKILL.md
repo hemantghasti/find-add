@@ -1,6 +1,6 @@
 ---
 name: find-add
-description: Find the best local and online skills, plugins, MCP servers, and GitHub repositories for the user's task, load what is useful into the chat, then do the task with them. Use when the user types /find-add (or $find-add in Codex) followed by a task, or asks to find and add the best skills, plugins, MCPs, tools, or repos before starting work.
+description: Find the best local and online skills, plugins, MCP servers, and GitHub repositories for the user's task, load what is useful into the chat, then do the task with them. Use when the user types /find-add (/find-add:find-add as a Claude Code plugin, $find-add in Codex) followed by a task, or asks to find and add the best skills, plugins, MCPs, tools, or repos before starting work.
 ---
 # find-add
 
@@ -8,7 +8,7 @@ Turn a plain prompt into a boosted one: find the few skills, plugins, MCP server
 
 ## Input
 
-The task is whatever the user typed after `/find-add` (or `$find-add` in Codex). Some tools append it below these instructions; others leave it in the same message. If there is no task, ask the user what they want done and stop.
+The task is whatever the user typed after the command: `/find-add`, `/find-add:find-add` (Claude Code plugin), or `$find-add` (Codex). Some tools append it below these instructions; others leave it in the same message. If there is no task, ask the user what they want done and stop.
 
 ## Steps
 

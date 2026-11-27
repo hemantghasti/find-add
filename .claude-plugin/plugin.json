@@ -1,0 +1,12 @@
+{
+  "name": "find-add",
+  "description": "Finds the best local and online skills, plugins, MCP servers and GitHub repos for your task, adds them to the chat, then does the task with them.",
+  "author": {
+    "name": "Hemant Ghasti",
+    "url": "https://github.com/hemantghasti"
+  },
+  "homepage": "https://github.com/hemantghasti/find-add",
+  "repository": "https://github.com/hemantghasti/find-add",
+  "license": "MIT",
+  "keywords": ["skills", "mcp", "plugins", "discovery", "productivity", "agent-skills"]
+}

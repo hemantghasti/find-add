@@ -1,0 +1,16 @@
+{
+  "name": "find-add",
+  "description": "The find-add plugin: find and add the best skills, plugins, MCP servers and repos for any task.",
+  "owner": {
+    "name": "Hemant Ghasti",
+    "url": "https://github.com/hemantghasti"
+  },
+  "plugins": [
+    {
+      "name": "find-add",
+      "source": "./",
+      "description": "Finds the best local and online skills, plugins, MCP servers and GitHub repos for your task, adds them to the chat, then does the task with them.",
+      "category": "productivity"
+    }
+  ]
+}

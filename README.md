@@ -22,6 +22,8 @@ One [Agent Skills](https://agentskills.io/home) file (`SKILL.md`) is the source.
 
 Codex doesn't support custom `/` commands any more (its custom prompts were replaced by skills), so in Codex you type `$find-add`, or pick it from `/skills`.
 
+If you install it as a [Claude Code plugin](#claude-code-plugin) instead, Claude Code puts the plugin name in front of the command, so you type `/find-add:find-add <task>`.
+
 `~/.agents/skills/` is the shared Agent Skills folder, which Codex, Gemini CLI, VS Code and OpenCode also read. The installer always writes it.
 
 ## Install
@@ -58,6 +60,25 @@ Then restart any open AI tools, or reload their skills: `/skills reload` in Anti
 | `-TargetHome <dir>` | `--home <dir>` | Install into another home folder (for testing) |
 
 Installed a new AI tool later? Run the installer again. It's safe to re-run, and it overwrites its own files.
+
+### Claude Code plugin
+
+If you only use Claude Code, you can install find-add as a plugin without cloning anything. In Claude Code (version 2.1.275 or later), type:
+
+```text
+/plugin install find-add --marketplace hemantghasti/find-add
+```
+
+On older versions, add the marketplace first, then install:
+
+```text
+/plugin marketplace add hemantghasti/find-add
+/plugin install find-add@find-add
+```
+
+From a terminal, the same steps are `claude plugin marketplace add hemantghasti/find-add` and then `claude plugin install find-add@find-add`.
+
+Then type `/find-add:find-add <your task>`. The plugin covers Claude Code only; use the script install for the other tools.
 
 ### `npx skills` install
 
@@ -112,6 +133,9 @@ Web chat apps don't load slash commands from files, so there's nothing to instal
 
 ```text
 find-add/
+├── .claude-plugin/
+│   ├── plugin.json       # Claude Code plugin manifest
+│   └── marketplace.json  # lets Claude Code install this repo as a plugin
 ├── README.md
 ├── LICENSE
 ├── install.sh          # macOS / Linux installer
