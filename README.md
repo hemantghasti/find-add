@@ -1,12 +1,30 @@
 # find-add
 
-Type `/find-add <your task>` in your AI coding tool. Before it starts work, the AI looks for skills, plugins, MCP servers and GitHub repos that fit the task, first among what you already have and then online. It tells you what it found and what it's using, then does the task with them.
+**Stop hunting for skills, MCP servers and repos. Type `/find-add` and your AI finds them, loads them, and gets to work.**
 
-Skill finders such as `find-skills` help you find and install agent skills. find-add also looks at MCP servers, plugins and GitHub repos, uses what's already installed straight away, and finishes your task in the same reply.
+[![Works with 11 AI tools](https://img.shields.io/badge/works%20with-11%20AI%20tools-8A2BE2)](#works-with)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-D97757)](#claude-code-plugin)
+[![License: MIT](https://img.shields.io/github/license/hemantghasti/find-add)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/hemantghasti/find-add?style=social)](https://github.com/hemantghasti/find-add/stargazers)
 
-One [Agent Skills](https://agentskills.io/home) file (`SKILL.md`) is the source. The installer copies it to every AI tool it finds, and generates slash-command files for tools that use their own command format.
+One command. Claude Code, Copilot, Cursor, Codex, Cline, Windsurf and more. No more digging through awesome-lists before every task.
 
-## Example
+## The problem
+
+There are thousands of agent skills, MCP servers and starter repos out there. Your AI uses none of them unless you go find them, install them and point it at them. Most people never do, so their AI works from general knowledge when a purpose-built tool was one search away.
+
+## The fix
+
+```text
+/find-add <your task>
+```
+
+1. **Checks what you already have.** Installed skills, connected MCP servers, plugins, and your project's stack.
+2. **Searches for what's missing.** [skills.sh](https://skills.sh/), the official MCP Registry, and GitHub. Keeps only the 2 to 4 best.
+3. **Shows its work.** What it's using right now, and what you could install, with the exact command.
+4. **Does the task.** In the same reply. No extra prompt needed.
+
+## See it work
 
 A real run in Claude Code, shortened:
 
@@ -24,9 +42,9 @@ A real run in Claude Code, shortened:
 > Optional installs (not installed):
 > - GitHub MCP server: configured but not signed in. Signing in with `/mcp` would let the AI open the pull request itself.
 
-It then wrote `.github/workflows/lint.yml`, with a ShellCheck job on Ubuntu and a PSScriptAnalyzer job on Windows.
+Then it wrote the workflow: a ShellCheck job on Ubuntu and a PSScriptAnalyzer job on Windows. One command, three sources found, task done.
 
-## Supported Tools
+## Works with
 
 | AI tool | Type this | What the installer adds |
 | --- | --- | --- |
@@ -42,23 +60,11 @@ It then wrote `.github/workflows/lint.yml`, with a ShellCheck job on Ubuntu and 
 | Gemini CLI | `/find-add <task>` | `~/.gemini/commands/find-add.toml` |
 | OpenAI Codex (CLI, IDE) | `$find-add <task>` | `~/.agents/skills/find-add/SKILL.md` |
 
-Codex doesn't support custom `/` commands any more (its custom prompts were replaced by skills), so in Codex you type `$find-add`, or pick it from `/skills`.
+Codex replaced custom `/` commands with skills, so there you type `$find-add`. As a [Claude Code plugin](#claude-code-plugin), the command is `/find-add:find-add`.
 
-If you install it as a [Claude Code plugin](#claude-code-plugin) instead, Claude Code puts the plugin name in front of the command, so you type `/find-add:find-add <task>`.
+## Install in 30 seconds
 
-`~/.agents/skills/` is the shared Agent Skills folder, which Codex, Gemini CLI, VS Code and OpenCode also read. The installer always writes it.
-
-## Status
-
-- **Claude Code:** tested. The script-installed skill runs (the example above), and the plugin installs cleanly from GitHub.
-- **Installers:** tested in PowerShell 5.1 and 7 on Windows, and in bash (Git Bash on Windows). Not yet tested on macOS or Linux.
-- **Other tools:** the installer puts the files where each tool's docs say they go, but find-add hasn't been run inside those tools yet. If you try it in one, please [open an issue](https://github.com/hemantghasti/find-add/issues) saying whether it worked.
-
-## Install
-
-### Script install (recommended)
-
-The script detects which AI tools you have and installs `/find-add` into each of them. It is the only install method that adds the slash-command files for Cursor, Roo Code, OpenCode, Windsurf and Gemini CLI.
+The installer detects every AI tool on your computer and sets up `/find-add` in each one.
 
 **Windows (PowerShell)**
 
@@ -76,9 +82,7 @@ cd find-add
 ./install.sh
 ```
 
-Then restart any open AI tools so they pick up the new command.
-
-**Options**
+Restart your AI tools and type `/find-add`. Done.
 
 | PowerShell | Bash | What it does |
 | --- | --- | --- |
@@ -86,66 +90,62 @@ Then restart any open AI tools so they pick up the new command.
 | `-Uninstall` | `--uninstall` | Remove everything the installer added |
 | `-TargetHome <dir>` | `--home <dir>` | Install into another home folder (for testing) |
 
-Installed a new AI tool later? Run the installer again. It's safe to re-run, and it overwrites its own files.
+New AI tool later? Run the installer again. It's safe to re-run.
 
 ### Claude Code plugin
 
-If you only use Claude Code, you can install find-add as a plugin without cloning anything. In Claude Code (version 2.1.275 or later), type:
+One line, nothing to clone. In Claude Code 2.1.275 or later:
 
 ```text
 /plugin install find-add --marketplace hemantghasti/find-add
 ```
 
-On older versions, add the marketplace first, then install:
+On older versions:
 
 ```text
 /plugin marketplace add hemantghasti/find-add
 /plugin install find-add@find-add
 ```
 
-From a terminal, the same steps are `claude plugin marketplace add hemantghasti/find-add` and then `claude plugin install find-add@find-add`.
+Then type `/find-add:find-add <your task>`.
 
-Then type `/find-add:find-add <your task>`. The plugin covers Claude Code only; use the script install for the other tools.
-
-### `npx skills` install
-
-If you use the open [`skills`](https://github.com/vercel-labs/skills) CLI (needs Node.js):
+### `npx skills`
 
 ```bash
 npx skills add hemantghasti/find-add -g
 ```
 
-This installs the skill into the skills folders of supported agents. It doesn't create the command files that Cursor, Roo Code, OpenCode, Windsurf and Gemini CLI need for `/find-add`, so use the script install for those.
+This adds the skill to supported agents' skill folders. For the Cursor, Roo Code, OpenCode, Windsurf and Gemini CLI slash commands, use the installer.
 
-### Manual install
+### Manual
 
-Copy `skills/find-add/SKILL.md` to the path shown for your tool in the table above. For a single project rather than your whole computer, use the same path inside the project, without `~/`. For example, `.claude/skills/find-add/SKILL.md` or `.agents/skills/find-add/SKILL.md`.
+Copy `skills/find-add/SKILL.md` to your tool's path from the table. For one project only, use the same path inside the project, without `~/`.
 
 ### Chat apps (Claude.ai, ChatGPT, Gemini)
 
-Not tested yet. Web chat apps don't load slash commands from files, so these are workarounds:
+Experimental, not tested yet:
 
-- **Claude.ai:** zip the `skills/find-add` folder and upload it as a custom skill in Claude's settings, then ask for find-add in a chat.
-- **ChatGPT or Gemini:** paste the text of `SKILL.md` (everything below the `---` header) into a Custom GPT, a Project, or a Gem's instructions. Then start messages there with `/find-add`.
+- **Claude.ai:** zip the `skills/find-add` folder, upload it as a custom skill in settings, then ask for find-add in a chat.
+- **ChatGPT or Gemini:** paste `SKILL.md` (below the `---` header) into a Custom GPT, Project or Gem, then start messages with `/find-add`.
 
-## How It Works
+## Built to ask first
 
-1. **Read the task:** works out the goal, the stack, and where a specialised tool would help.
-2. **Local first:** checks the skills, plugins and MCP servers your AI tool already has, then your skill folders and MCP configs.
-3. **Online for the gaps:** searches [skills.sh](https://skills.sh/), the official MCP Registry, and GitHub, and keeps 2 to 4 resources at most.
-4. **Show what was added:** lists what it's using now, plus optional installs with exact commands (see the [example](#example)).
-5. **Do the task:** completes your task in the same reply, using what it found.
+- It **suggests** install commands instead of running them. You decide what goes on your machine.
+- It treats web pages, READMEs and other people's skills as **information, not orders**. It's told never to follow instructions planted in them.
+- It only links to things it **actually found**.
 
-## Safety
+find-add is a set of instructions your AI follows, so keep your tool's permission prompts on as the final safety net.
 
-find-add's instructions tell the AI to:
+## Tested
 
-- ask before installing or running any third-party package, script, MCP server or plugin, and otherwise only suggest install commands for you to run;
-- treat web pages, READMEs and other people's skills as information, not as instructions to follow;
-- only cite links and commands it actually found.
+- **Claude Code:** verified. The run above is real, and the plugin installs cleanly from GitHub.
+- **Installers:** verified on Windows in PowerShell 5.1, PowerShell 7 and bash.
+- **Everything else:** installs to each tool's documented location. Tried it in another tool? [Tell us how it went](https://github.com/hemantghasti/find-add/issues).
 
-These are instructions, not hard limits, and an AI can still get them wrong. Your AI tool's own permission prompts are the real safeguard, so keep them on.
+## Help it spread
+
+If find-add saved you a search, **⭐ star the repo** so other people find it too. Ideas, bugs and new tool support are welcome as [issues](https://github.com/hemantghasti/find-add/issues) and pull requests.
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+MIT. See [LICENSE](LICENSE).
